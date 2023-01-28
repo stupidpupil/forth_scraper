@@ -44,7 +44,7 @@ jobs:
       run: |
         devtools::load_all()
 
-        products <- get_melio_products()
+        products <- get_forth_products()
 
         products |>
           products_to_exchange_format() |>
