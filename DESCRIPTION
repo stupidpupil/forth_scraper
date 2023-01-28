@@ -16,6 +16,7 @@ Imports:
   stringr,
   httr,
   readr,
-  rvest
+  rvest,
+  lubridate
 Suggests: 
   testthat
