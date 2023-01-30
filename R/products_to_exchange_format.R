@@ -45,6 +45,8 @@ products_to_exchange_format <- function(products){
       return(prod)
     })
 
+  venous_sampling_price_pence <- get_forth_venous_sampling_price_pence()
+
   venous <- products |>
     purrr::keep(function(prod) {
       !is.na(prod$venous_available) & prod$venous_available
@@ -56,7 +58,7 @@ products_to_exchange_format <- function(products){
       prod$name = jsonlite::unbox(paste0(prod$name, " with venous sample"))
 
       prod$sampling_procedure = jsonlite::unbox("venous")
-      prod$price_pence = jsonlite::unbox(prod$price_pence + (30*100))
+      prod$price_pence = jsonlite::unbox(prod$price_pence + venous_sampling_price_pence)
 
       return(prod)
     })
