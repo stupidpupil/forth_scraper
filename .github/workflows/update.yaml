@@ -51,6 +51,9 @@ jobs:
           complete_exchange_format() |>
           jsonlite::write_json("output/exchange.json")
 
+        get_forth_bespoke_info() |>
+          jsonlite::write_json("output/bespoke.json")
+
       shell: Rscript {0}
 
     - name: Commit new output

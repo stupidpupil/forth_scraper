@@ -23,11 +23,7 @@ get_forth_product_details <- function(forth_product_url){
     stringr::str_detect("gets tested")) |> rvest::html_nodes("li") |> rvest::html_text() |> unique()
 
   biomarkers <- biomarker_names |> 
-    stringr::str_to_lower() |> 
-    stringr::str_replace_all("[\\(\\)\\s,-]","_") |> 
-    stringr::str_replace_all("_+","_") |> 
-    stringr::str_replace_all("(^_|_$)","")
-
+    normalise_biomarker_name()
 
   venous_available <- forth_product_html |> rvest::html_nodes("span") |> rvest::html_text() |> stringr::str_detect("Phlebotomy kit") |> any()
 
