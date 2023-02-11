@@ -4,7 +4,11 @@ products_to_exchange_format <- function(products){
 
   products <- products |>
     purrr::keep(function(prod){
-      prod$available
+      !is.na(prod$available) &
+      prod$available &
+      !is.na(prod$title) &
+      !is.na(prod$handle) &
+      !is.na(prod$price_pence)
     }) |>
     purrr::map(function(prod){
       prod$available = NULL
