@@ -5,11 +5,13 @@ get_forth_product_details <- function(forth_product_url){
 
   forth_product_html <- rvest::read_html(forth_product_url)
 
-  title <- forth_product_html |> rvest::html_node("h1") |> rvest::html_text()
+  title <- forth_product_html |> rvest::html_node("h2") |> rvest::html_text()
 
   price_pence <- forth_product_html |>
+    rvest::html_nodes(xpath='//*[starts-with(@id,"productBar")]') |>
     rvest::html_nodes("div") |> 
     rvest::html_text() |> 
+    stringr::str_trim() |>
     stringr::str_match("^£(\\d+)$") |> (\(x) x[,2])() |> 
     as.numeric() |> na.omit() |> dplyr::first() |> (\(x) as.integer(x*100))()
 
@@ -25,7 +27,7 @@ get_forth_product_details <- function(forth_product_url){
   biomarkers <- biomarker_names |> 
     normalise_biomarker_name()
 
-  venous_available <- forth_product_html |> rvest::html_nodes("span") |> rvest::html_text() |> stringr::str_detect("Phlebotomy kit") |> any()
+  venous_available <- forth_product_html |> rvest::html_nodes("span") |> rvest::html_text() |> stringr::str_detect("([Pp]hlebotomy|Superdrug|partner clinic)") |> any()
 
   venous_only <- venous_available &
     !(forth_product_html |> rvest::html_nodes("span") |> rvest::html_text() |> stringr::str_detect("Finger ?prick") |> any())
