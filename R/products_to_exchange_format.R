@@ -34,6 +34,37 @@ products_to_exchange_format <- function(products){
     })
 
 
+  stopifnot(length(products) > 5)
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Tt]estosterone\\b")}) |> 
+    purrr::every(function(prod){"997161000000108" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Oo]?[Ee]stradiol\\b")}) |> 
+    purrr::every(function(prod){"1010521000000102" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Oo]?[Ee]strogen\\b")}) |> 
+    purrr::every(function(prod){"1010521000000102" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Ff]emale [Hh]ormone")}) |> 
+    purrr::every(function(prod){"1010521000000102" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("menopaus")}) |> 
+    purrr::every(function(prod){"1010521000000102" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Ll]iver\\b")}) |> 
+    purrr::every(function(prod){"1000861000000106" %in% prod$biomarkers}))
+
+  stopifnot(products |> 
+    purrr::keep(function(prod){prod$name |> stringr::str_detect("\\b[Ll]iver\\b")}) |> 
+    purrr::every(function(prod){"1018251000000107" %in% prod$biomarkers}))
+
+
   fingerprick <- products |>
     purrr::keep(function(prod) {
       !is.na(prod$venous_only) & !prod$venous_only
