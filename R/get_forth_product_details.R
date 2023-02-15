@@ -5,7 +5,7 @@ get_forth_product_details <- function(forth_product_url){
 
   forth_product_html <- rvest::read_html(forth_product_url)
 
-  title <- forth_product_html |> rvest::html_node("h2") |> rvest::html_text()
+  title <- forth_product_html |> rvest::html_node("h1") |> rvest::html_text()
 
   price_pence <- forth_product_html |>
     rvest::html_nodes(xpath='//*[starts-with(@id,"productBar")]') |>
