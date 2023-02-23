@@ -17,6 +17,7 @@ Imports:
   httr,
   readr,
   rvest,
-  lubridate
+  lubridate,
+  jsonlite
 Suggests: 
   testthat

@@ -1,6 +1,8 @@
 get_forth_bespoke_info <- function(){
 
-  kits_json <- jsonlite::read_json("https://api.forthwithlife.co.uk//kit-pricing/get-kit-prices")
+
+
+  kits_json <- read_forth_json("https://api.forthwithlife.co.uk//kit-pricing/get-kit-prices")
 
 
   # Assume we can only access the first ?base kit
@@ -9,7 +11,7 @@ get_forth_bespoke_info <- function(){
 
   biomarkers_map <- readr::read_csv("data-raw/biomarker_snomed_map.csv", col_types="cc")
 
-  building_blocks_json <- jsonlite::read_json("https://api.forthwithlife.co.uk/bespoke-test/get-plus-tests/1?")
+  building_blocks_json <- read_forth_json("https://api.forthwithlife.co.uk/bespoke-test/get-plus-tests/1?")
 
   building_blocks <- building_blocks_json |> 
     purrr::map(function(x){
