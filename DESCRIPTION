@@ -18,6 +18,7 @@ Imports:
   readr,
   rvest,
   lubridate,
-  jsonlite
+  jsonlite,
+  RSelenium
 Suggests: 
   testthat

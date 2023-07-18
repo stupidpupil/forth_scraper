@@ -3,12 +3,12 @@ get_forth_product_details <- function(forth_product_url){
   handle <- forth_product_url |> 
     stringr::str_match("health-tests/([a-z0-9_-]+/[a-z0-9_-]+)/$") |> (\(x) x[,2])()
 
-  forth_product_html <- rvest::read_html(forth_product_url)
+  forth_product_html <- get_html_for_url(forth_product_url)
 
   title <- forth_product_html |> rvest::html_node("h1") |> rvest::html_text()
 
   price_pence <- forth_product_html |>
-    rvest::html_nodes(xpath='//*[starts-with(@id,"productBar")]') |>
+    rvest::html_nodes(xpath='//*[contains(@id,"FullPrice")]') |>
     rvest::html_nodes("div") |> 
     rvest::html_text() |> 
     stringr::str_trim() |>

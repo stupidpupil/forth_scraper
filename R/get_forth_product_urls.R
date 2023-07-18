@@ -2,7 +2,7 @@ get_forth_product_urls <- function(){
 
   list_url <- "https://www.forthwithlife.co.uk/health-tests/"
 
-  list_html <- rvest::read_html(list_url)
+  list_html <- get_html_for_url(list_url)
 
   list_html |> 
     rvest::html_nodes("a[href^='https://www.forthwithlife.co.uk/health-tests/']") |> 
