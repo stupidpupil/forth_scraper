@@ -16,14 +16,7 @@ jobs:
         distribution: adopt
         java-version: '17'
 
-    - name: Remove Chrome
-      run: sudo apt purge google-chrome-stable
-
-    - name: Remove default Chromium
-      run: sudo apt purge chromium-browser
-
-    - name: Install a new Chromium
-      run: sudo apt install -y chromium-browser chromium-chromedriver
+    - uses: nanasess/setup-chromedriver@v2
 
     - name: Download and start Selenium
       run:
