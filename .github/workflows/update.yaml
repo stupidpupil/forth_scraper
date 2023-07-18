@@ -19,7 +19,7 @@ jobs:
     - uses: nanasess/setup-chromedriver@v2
 
     - name: Download and start Selenium
-      run:
+      run: |
         wget https://selenium-release.storage.googleapis.com/3.9/selenium-server-standalone-3.9.1.jar
         java -jar selenium-server-standalone-3.9.1.jar &
 
