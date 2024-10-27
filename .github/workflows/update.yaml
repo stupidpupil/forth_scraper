@@ -58,12 +58,12 @@ jobs:
       run: |
         devtools::load_all()
 
-        #products <- get_forth_products()
+        products <- get_forth_products()
 
-        #products |>
-        #  products_to_exchange_format() |>
-        #  complete_exchange_format() |>
-        #  jsonlite::write_json("output/exchange.json")
+        products |>
+          products_to_exchange_format() |>
+          complete_exchange_format() |>
+          jsonlite::write_json("output/exchange.json")
 
         get_forth_bespoke_info() |>
           jsonlite::write_json("output/bespoke.json")
