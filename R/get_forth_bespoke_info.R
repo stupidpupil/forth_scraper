@@ -11,16 +11,40 @@ get_forth_bespoke_info <- function(){
 
   biomarkers_map <- readr::read_csv("data-raw/biomarker_snomed_map.csv", col_types="cc")
 
-  building_blocks_json <- read_forth_json("https://api.forthwithlife.co.uk/bespoke-test/get-plus-tests/1?")
 
-  building_blocks <- building_blocks_json |> 
-    purrr::map(function(x){
+  remDr <- get_selenium_session()
 
-      list(
-        name = jsonlite::unbox(x$testName),
-        price_pence = jsonlite::unbox(as.integer(as.numeric(x$testPrice) * 100)),
-        biomarkers = x$biomarkers |> purrr::map_chr(function(b){
-          bs <- b$biomarkerName |> normalise_biomarker_name()
+  remDr$navigate("https://build.forthwithlife.co.uk/bespoke-test/0")
+  Sys.sleep(3.0)
+
+  articles <- remDr$findElements(using="xpath", "//article")
+
+
+  building_blocks <- articles |> 
+    purrr::imap(function(x, i){
+
+      header <- tryCatch({
+         x$findChildElement(using="xpath", ".//header")
+      },
+        error= function(cond){ NULL }
+      )
+
+      if(is.null(header)){
+        return(list())
+      }
+
+
+      remDr$executeScript(paste0('document.getElementsByTagName("article")[', i-1, '].getElementsByTagName("button")[0].click()'))
+
+      Sys.sleep(0.1)
+
+      biomarkers <- remDr$findElements(using="xpath", "//div[@id=\'biomarkersItems\']//h2")
+      biomarkers <- biomarkers |> purrr::map(function(b){
+        b$getElementText()
+      })
+
+      biomarkers <- biomarkers |> unlist() |> purrr::map_chr(function(b){
+          bs <- b |> normalise_biomarker_name()
           bs <- tibble::tibble(biomarker_handle = bs) |>
             dplyr::left_join(biomarkers_map, by="biomarker_handle") |>
             dplyr::pull(sctid)
@@ -28,8 +52,20 @@ get_forth_bespoke_info <- function(){
           return(bs)
         }) |> unname() |> na.omit()
 
+      remDr$executeScript('document.getElementsByClassName("btn-close")[0].click()')
+
+      price_pence <- x$getElementText() |> 
+          stringr::str_extract("£\\s*(\\d+(\\.\\d+)?)", group=1) |>
+          as.numeric() |> na.omit() |> dplyr::first() |> (\(x) as.integer(x*100))()
+
+      list(
+        name = header$getElementText() |> unlist(),
+        price_pence = price_pence,
+        biomarkers = biomarkers
       )
     })
+
+  building_blocks <- building_blocks |> purrr::keep(\(x) any(!is.na(x$biomarkers)))
 
   list(
     kit_price_pence = jsonlite::unbox(kit_price_pence),
