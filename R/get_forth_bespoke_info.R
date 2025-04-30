@@ -59,8 +59,8 @@ get_forth_bespoke_info <- function(){
           as.numeric() |> na.omit() |> dplyr::first() |> (\(x) as.integer(x*100))()
 
       list(
-        name = header$getElementText() |> unlist(),
-        price_pence = price_pence,
+        name = header$getElementText() |> unlist() |> jsonlite::unbox(),
+        price_pence = price_pence |> jsonlite::unbox(),
         biomarkers = biomarkers
       )
     })
