@@ -18,13 +18,6 @@ get_forth_product_details <- function(forth_product_url){
 
   available <- TRUE # HACK
 
-  biomarker_names <-  forth_product_html |> 
-    rvest::html_nodes(css=".what-gets-tested-buttons button") |> 
-    rvest::html_text() |> unique()
-
-  biomarkers <- biomarker_names |> 
-    normalise_biomarker_name()
-
   venous_available <- forth_product_html |> 
     rvest::html_node(css=".product-usps") |> rvest::html_text() |> 
     stringr::str_detect("[Vv]enous collection") |> any()
@@ -34,6 +27,22 @@ get_forth_product_details <- function(forth_product_url){
     stringr::str_detect("[Ff]inger ?prick") |> any()
 
   venous_only <- venous_available & !fingerpick_available
+
+  remDr <- get_selenium_session()
+  remDr$executeScript('document.getElementsByClassName("what-gets-tested")[0].click()')
+  Sys.sleep(0.1)
+
+  orth_product_html <- remDr$getPageSource() |> dplyr::first() |> xml2::read_html()
+
+
+  biomarker_names <-  forth_product_html |> 
+    rvest::html_nodes(css=".biomarker-content li") |> 
+    rvest::html_text() |> unique()
+
+  biomarkers <- biomarker_names |> 
+    normalise_biomarker_name()
+
+
 
   list(
     title = title,
