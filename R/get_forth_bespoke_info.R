@@ -2,11 +2,11 @@ get_forth_bespoke_info <- function(){
 
 
 
-  kits_json <- read_forth_json("https://api.forthwithlife.co.uk//kit-pricing/get-kit-prices")
+  #kits_json <- read_forth_json("https://api.forthwithlife.co.uk//kit-pricing/get-kit-prices")
 
 
   # Assume we can only access the first ?base kit
-  kit_price_pence <- as.integer(as.numeric(kits_json[[1]]$kitPrice)*100)
+  kit_price_pence <- 3700#as.integer(as.numeric(kits_json[[1]]$kitPrice)*100)
   venous_sampling_price_pence <- get_forth_venous_sampling_price_pence()
 
   biomarkers_map <- readr::read_csv("data-raw/biomarker_snomed_map.csv", col_types="cc")

@@ -1,4 +1,6 @@
 get_forth_venous_sampling_price_pence <- function(){
+  return(4500) #HACK
+
   phlebotomy_json <- read_forth_json("https://api.forthwithlife.co.uk/phlebotomy/get-plebotomy-prices")
 
   venous_sampling_entry <- phlebotomy_json |> 
